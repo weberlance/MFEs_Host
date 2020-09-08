@@ -23,11 +23,24 @@ class MicroFrontend extends React.Component {
     //     script.onload = this.renderMicroFrontend;
     //     document.head.appendChild(script);
     //   });
-    const script = document.createElement('script');
-    script.id = scriptId;
-    script.src = `${host}/bundle.js`;
-    script.onload = this.renderMicroFrontend;
-    document.head.appendChild(script);
+
+    // case with correct mime
+    // const script = document.createElement('script');
+    // script.id = scriptId;
+    // script.src = `${host}/bundle.js`;
+    // script.onload = this.renderMicroFrontend;
+    // document.head.appendChild(script);
+
+    // for Demo purposes only. Use script as a text due to wrong mime type from github
+    fetch(`${host}/bundle.js`)
+      .then(res => res.text())
+      .then(rawScript => {
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.append(rawScript);
+        document.head.append(script);
+        this.renderMicroFrontend();
+      });
   }
 
   componentWillUnmount() {
@@ -56,7 +69,14 @@ class MicroFrontend extends React.Component {
   };
 
   render() {
-    return <main id={`${this.props.name}-container`} />;
+    const { name, host } = this.props;
+    return (
+      <div>
+        <h1>{name} MicroFrontend</h1>
+        <p>from '{host}'</p>
+        <main id={`${this.props.name}-container`} />
+      </div>
+    );
   }
 }
 
