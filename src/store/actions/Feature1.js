@@ -6,6 +6,6 @@ export const feature1ActionRequest = () => ({
 });
 
 export const feature1ActionReceive = payload => ({
-  type: types.GET_DATA_REQUEST,
+  type: types.GET_DATA_RECEIVE,
   payload
 });

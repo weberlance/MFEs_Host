@@ -1,8 +1,11 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { loader } from '../../store/actions/Loader';
 
 class MicroFrontend extends React.Component {
   componentDidMount() {
-    const { name, host } = this.props;
+    const { name, host, loader } = this.props;
     const scriptId = `micro-frontend-script-${name}`;
 
     if (document.getElementById(scriptId)) {
@@ -32,6 +35,7 @@ class MicroFrontend extends React.Component {
     // document.head.appendChild(script);
 
     // for Demo purposes only. Use script as a text due to wrong mime type from github
+    loader(true);
     fetch(`${host}/bundle.js`)
       .then(res => res.text())
       .then(rawScript => {
@@ -40,6 +44,11 @@ class MicroFrontend extends React.Component {
         script.append(rawScript);
         document.head.append(script);
         this.renderMicroFrontend();
+        loader(false);
+      })
+      .catch(e => {
+        loader(false);
+        console.log(e);
       });
   }
 
@@ -80,4 +89,13 @@ class MicroFrontend extends React.Component {
   }
 }
 
-export default MicroFrontend;
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      loader,
+    },
+    dispatch,
+  );
+
+
+export default connect(null, mapDispatchToProps)(MicroFrontend);

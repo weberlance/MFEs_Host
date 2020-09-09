@@ -1,6 +1,8 @@
 import * as types from '../types/Feature1Types';
 
-const INITIAL_STATE = {};
+const INITIAL_STATE = {
+  data: 'host store static data',
+};
 
 // Replace with you own reducer
 export default (state = INITIAL_STATE, action) => {
